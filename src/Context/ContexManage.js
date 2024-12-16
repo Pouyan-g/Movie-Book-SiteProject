@@ -1,9 +1,28 @@
-import React from "react";
-import React, { createContext } from "react";
+import axios from "axios";
+import React, { useState, createContext } from "react";
 
-function ContexManage() {
-  const DataContex = createContext();
-  return <div>ContexManage</div>;
-}
+const DataContex = createContext();
 
-export default ContexManage;
+const Provider = ({ children }) => {
+  const [title, SetTitle] = useState([]);
+  const [Situ, SetTitu] = useState([]);
+  const [OpenModal, SOpenModal] = useState(false);
+
+  const CreatHandler = async () => {
+    const resp = await axios.post("");
+  };
+
+  const valurToShare = {
+    title,
+    SetTitle,
+    Situ,
+    SetTitu,
+    OpenModal,
+    SOpenModal,
+  };
+  return (
+    <DataContex.Provider value={valurToShare}>{children}</DataContex.Provider>
+  );
+};
+export { Provider };
+export default DataContex;

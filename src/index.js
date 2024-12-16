@@ -4,14 +4,17 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ListPage from "./ListPage";
 import App from "./App";
+import { Provider } from "./Context/ContexManage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/list" element={<ListPage />} />
-    </Routes>
+    <Provider>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/list" element={<ListPage />} />
+      </Routes>
+    </Provider>
   </BrowserRouter>
 );
 

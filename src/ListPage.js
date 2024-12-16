@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Modal from "./Components/Modal";
-import DropDown from "./Components/DropDown";
+import ListShow from "./Components/ListShow";
+import DataContex from "./Context/ContexManage";
 
 function ListPage() {
-  const [open, setOpen] = useState(false);
-  const ModalHandler = () => {
-    setOpen(true);
-  };
+  const { OpenModal, SOpenModal } = useContext(DataContex);
+
   return (
     <div>
+      <ListShow />
       <div>
-        <button onClick={ModalHandler}>Make a new array</button>
+        <button onClick={() => SOpenModal(true)}>Make a new array</button>
       </div>
-      {open && <Modal />}
+      {OpenModal && <Modal />}
     </div>
   );
 }

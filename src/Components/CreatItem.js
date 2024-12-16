@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DropDown from "./DropDown";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
+import DataContex from "../Context/ContexManage";
 
 function CreatItem() {
   const [movieORbook, setmovieORbook] = useState();
   const [Done, SetDone] = useState(false);
+  const [Name, SetName] = useState("");
+  const [sitution, setSitution] = useState("");
+
+  const { SetTitle, SetTitu, SOpenModal } = useContext(DataContex);
 
   const handleSelect = (e) => {
     if (e === "I Wrote it" || e === "I Watched it") {
@@ -13,7 +18,7 @@ function CreatItem() {
     } else {
       SetDone(false);
     }
-    console.log(Done);
+    setSitution(e);
   };
 
   const showLikeOrDislike = () => {
@@ -24,9 +29,22 @@ function CreatItem() {
       </div>
     );
   };
+
+  const ChangeHandler = (event) => {
+    SetName(event.target.value);
+  };
+
+  const FormHandler = (event) => {
+    event.preventDefault();
+    SetTitle(Name);
+    SetTitu(sitution);
+    SOpenModal(false);
+  };
+
+  const SubmitBTN_Handler = () => {};
   return (
     <div>
-      <form>
+      <form onSubmit={FormHandler}>
         <label>
           <input
             type="radio"
@@ -52,7 +70,12 @@ function CreatItem() {
         <div>
           {movieORbook === "book" && (
             <div>
-              <input type="text" placeholder="enter the name" />
+              <input
+                type="text"
+                placeholder="enter the book name"
+                onChange={ChangeHandler}
+                value={Name}
+              />
               <DropDown book answer={handleSelect} />
               {Done && showLikeOrDislike()}
             </div>
@@ -61,12 +84,18 @@ function CreatItem() {
         <div>
           {movieORbook === "movie" && (
             <div>
-              <input type="text" placeholder="enter the name" />
+              <input
+                type="text"
+                placeholder="enter the movie name"
+                onChange={ChangeHandler}
+                value={Name}
+              />
               <DropDown movie answer={handleSelect} />
               {Done && showLikeOrDislike()}
             </div>
           )}
         </div>
+        <button>Submit</button>
       </form>
     </div>
   );
