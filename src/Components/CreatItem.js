@@ -2,14 +2,18 @@ import React, { useContext, useState } from "react";
 import DropDown from "./DropDown";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import DataContex from "../Context/ContexManage";
+import classNames from "classnames";
+import { useEffect } from "react";
 
 function CreatItem() {
   const [movieORbook, setmovieORbook] = useState();
   const [Done, SetDone] = useState(false);
-  const [Name, SetName] = useState("");
-  const [sitution, setSitution] = useState("");
+  const [Name, SetName] = useState();
+  const [URL, setURL] = useState();
+  const [sitution, setSitution] = useState();
+  const [Like, SetLike] = useState();
 
-  const { SetTitle, SetTitu, SOpenModal } = useContext(DataContex);
+  const { SOpenModal, ItemCreator } = useContext(DataContex);
 
   const handleSelect = (e) => {
     if (e === "I Wrote it" || e === "I Watched it") {
@@ -21,11 +25,28 @@ function CreatItem() {
     setSitution(e);
   };
 
+  const SheetDis = classNames("cursor-pointer mr-3", {
+    "fill-blue-200": Like === false,
+  });
+  const SheetLike = classNames("cursor-pointer mr-3", {
+    "fill-blue-500": Like === true,
+  });
+
   const showLikeOrDislike = () => {
     return (
-      <div>
-        <AiFillLike />
-        <AiFillDislike />
+      <div className="flex p-1 text-2xl">
+        <AiFillLike
+          className={SheetLike}
+          onClick={() => {
+            SetLike(true);
+          }}
+        />
+        <AiFillDislike
+          className={SheetDis}
+          onClick={() => {
+            SetLike(false);
+          }}
+        />
       </div>
     );
   };
@@ -36,12 +57,9 @@ function CreatItem() {
 
   const FormHandler = (event) => {
     event.preventDefault();
-    SetTitle(Name);
-    SetTitu(sitution);
     SOpenModal(false);
+    ItemCreator(Name, sitution, Like, movieORbook);
   };
-
-  const SubmitBTN_Handler = () => {};
   return (
     <div>
       <form onSubmit={FormHandler}>
@@ -51,9 +69,9 @@ function CreatItem() {
             value="book"
             name="creatitem"
             className="m-2"
-            // checked={true}
             onChange={() => setmovieORbook("book")}
           />
+          {/* {SetDone(false)} */}
           book
         </label>
         <label>
@@ -64,6 +82,7 @@ function CreatItem() {
             className="m-2"
             onChange={() => setmovieORbook("movie")}
           />
+          {/* {SetDone(false)} */}
           movie
         </label>
 
@@ -87,6 +106,13 @@ function CreatItem() {
               <input
                 type="text"
                 placeholder="enter the movie name"
+                onChange={ChangeHandler}
+                value={Name}
+              />
+              <input
+                className="flex mt-1"
+                type="text"
+                placeholder="enter the book URL"
                 onChange={ChangeHandler}
                 value={Name}
               />
