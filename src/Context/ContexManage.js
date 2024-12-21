@@ -5,18 +5,18 @@ const DataContex = createContext();
 const Provider = ({ children }) => {
   const [item, setItem] = useState([]);
   const [OpenModal, SOpenModal] = useState(false);
-  const [id, setId] = useState();
+  // const [id, setId] = useState();
 
-  const ItemCreator = async (title, sitution, Like, moviebook) => {
+  const ItemCreator = async (title, sitution, Like, moviebook, ImgUrl, id) => {
     const resp = await axios.post("http://localhost:3001/item", {
       id: id,
       title: title,
       situt: sitution,
       like: Like,
       moviebook: moviebook,
+      ImgUrl: ImgUrl,
     });
     setItem([...item, resp.data]);
-    setId(Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
   };
 
   const DeleteItem = async (id) => {
@@ -32,17 +32,23 @@ const Provider = ({ children }) => {
     setItem(resp.data);
   };
 
-  const edititem = async (id, title) => {
-    const resp = await axios.put(`http://localhost:3001/item/${id}`, {
-      title,
-    });
+  const edititem = async (id, newtitle) => {
+    const resp = await axios.put(
+      `http://localhost:3001/item/${id}`,
+      {
+        title: newtitle,
+      },
+      ...item
+    );
     const update = item.map((_item) => {
       if (_item.id === id) {
-        return { ...item, ...resp.data };
+        return { item, ...resp.data };
       }
-      return;
+
+      return _item;
     });
-    setItem(resp.data);
+    setItem(update);
+    // console.log(update);
   };
 
   const valurToShare = {

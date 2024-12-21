@@ -12,61 +12,75 @@ function ListShow() {
   const [editBTN, SetEditBTN] = useState(false);
   const [stateEditId, SetStateEditId] = useState();
   const [newTitle, SetNewTitle] = useState();
+
   const FormHandler = (event) => {
     event.preventDefault();
     SetNewTitle(event.target.value);
-    console.log(stateEditId);
+    // console.log(stateEditId);
+    // console.log(newTitle);
+
     edititem(stateEditId, newTitle);
     SetEditBTN(false);
+    SetNewTitle("");
   };
   const ChangeHandler = (event) => {
     SetNewTitle(event.target.value);
   };
   const rendereditem = item.map((item) => {
     return (
-      <div
-        key={item.id}
-        className="border-2 rounded-lg border-black inline-block p-2 m-0.5"
-        onMouseEnter={() => setHoveredItemId(item.id)}
-        onMouseLeave={() => setHoveredItemId(null)}
-      >
-        {hoveredItemId === item.id ? (
-          <div className="flex space-x-2">
-            <FaRegEdit
-              className="cursor-pointer mb-2"
-              onClick={() => handleEditClick(hoveredItemId, item.title)}
-            />
-            <MdDeleteOutline
-              className="cursor-pointer mb-2"
-              onClick={() => DeleteItem(stateEditId)}
-            />
+      <div className="inline-flex">
+        <div
+          key={item.id}
+          className="border-2 rounded-lg border-black p-2 flex m-0.5 max-w-sm"
+          onMouseEnter={() => setHoveredItemId(item.id)}
+          onMouseLeave={() => setHoveredItemId(null)}
+        >
+          {editBTN && stateEditId === item.id ? null : (
+            <div className="flex items-center">
+              <img
+                src={item.ImgUrl}
+                className="w-28 h-20 object-fill rounded-md"
+              />
+            </div>
+          )}
+
+          <div className="flex-col  ml-4  w-full">
+            {hoveredItemId === item.id ? (
+              <div className="flex space-x-2 justify-end  ">
+                <FaRegEdit
+                  className="cursor-pointer mb-2 absolute mr-5 "
+                  onClick={() => handleEditClick(hoveredItemId, item.title)}
+                />
+                <MdDeleteOutline
+                  className="cursor-pointer mb-2 absolute"
+                  onClick={() => DeleteItem(hoveredItemId)}
+                />
+              </div>
+            ) : null}
+            {item.moviebook === "book" ? <FaBook /> : <MdMovieCreation />}
+            {editBTN && stateEditId === item.id ? (
+              <form onSubmit={FormHandler}>
+                <input
+                  type="text"
+                  className="border-2"
+                  onChange={ChangeHandler}
+                  value={newTitle}
+                />
+                <button className="border-2">save</button>
+              </form>
+            ) : (
+              <h1 className="font-bold text-3xl ">{item.title}</h1>
+            )}
+            <p className="">{item.situt}</p>
+            {item.situt === "I Wrote it" || item.situt === "I Watched it" ? (
+              item.like ? (
+                <FcLike className="" />
+              ) : (
+                <FcDislike className="" />
+              )
+            ) : null}
           </div>
-        ) : null}
-
-        {item.moviebook === "book" ? <FaBook /> : <MdMovieCreation />}
-
-        {editBTN && stateEditId === item.id ? (
-          <form onSubmit={FormHandler}>
-            <input
-              type="text"
-              className="border-2"
-              onChange={ChangeHandler}
-              value={newTitle}
-            />
-            <button className="border-2">save</button>
-          </form>
-        ) : (
-          <h1>{item.title}</h1>
-        )}
-        <p>{item.situt}</p>
-
-        {item.situt === "I Wrote it" || item.situt === "I Watched it" ? (
-          item.like ? (
-            <FcLike />
-          ) : (
-            <FcDislike />
-          )
-        ) : null}
+        </div>
       </div>
     );
   });
@@ -86,12 +100,7 @@ function ListShow() {
     fetchitem();
   }, [item]);
 
-  return (
-    <div>
-      <p>Movie/Books:</p>
-      {rendereditem}
-    </div>
-  );
+  return <div>{rendereditem}</div>;
 }
 
 export default ListShow;

@@ -9,9 +9,12 @@ function CreatItem() {
   const [movieORbook, setmovieORbook] = useState();
   const [Done, SetDone] = useState(false);
   const [Name, SetName] = useState();
-  const [URL, setURL] = useState();
   const [sitution, setSitution] = useState();
   const [Like, SetLike] = useState();
+  const [id, setId] = useState();
+  const [ImgUrl, SetImgUrl] = useState(
+    "https://images.hdqwalls.com/wallpapers/error-404-page-3k.jpg"
+  );
 
   const { SOpenModal, ItemCreator } = useContext(DataContex);
 
@@ -54,11 +57,15 @@ function CreatItem() {
   const ChangeHandler = (event) => {
     SetName(event.target.value);
   };
+  const ChangeHandlerURL = (event) => {
+    SetImgUrl(event.target.value);
+  };
 
   const FormHandler = (event) => {
+    setId(Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
     event.preventDefault();
     SOpenModal(false);
-    ItemCreator(Name, sitution, Like, movieORbook);
+    ItemCreator(Name, sitution, Like, movieORbook, ImgUrl, id);
   };
   return (
     <div>
@@ -97,6 +104,12 @@ function CreatItem() {
               />
               <DropDown book answer={handleSelect} />
               {Done && showLikeOrDislike()}
+              <input
+                type="text"
+                placeholder="enter the book url"
+                onChange={ChangeHandlerURL}
+                value={ImgUrl}
+              />
             </div>
           )}
         </div>
@@ -109,15 +122,15 @@ function CreatItem() {
                 onChange={ChangeHandler}
                 value={Name}
               />
-              <input
-                className="flex mt-1"
-                type="text"
-                placeholder="enter the book URL"
-                onChange={ChangeHandler}
-                value={Name}
-              />
+
               <DropDown movie answer={handleSelect} />
               {Done && showLikeOrDislike()}
+              <input
+                type="text"
+                placeholder="enter the movie url"
+                onChange={ChangeHandlerURL}
+                value={ImgUrl}
+              />
             </div>
           )}
         </div>
